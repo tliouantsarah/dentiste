@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Patients</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 90%;
+            margin: 30px ;
+            background: #2c2c2c;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        tr{
+            color: white;
+        }
+        .btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background-color: #00ff1132;
+            color: white;
+        }
+        .btn-warning {
+            background-color: #98730d85;
+            color: white;
+        }
+        .btn-danger {
+            background-color: #721c258b;
+            color: white;
+        }
+        .btn-success {
+            background-color: #14476B;
+            color: white;
+            bottom: 100px;
+           
+          
+        }
+        .form-label {
+            font-weight:normal;
+            color: wheat;
+
+        }
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        h3{
+            color: #f4f4f4b8;
+        }
+        h2{
+            color: #007bff;
+        }
+        .one{
+            color: #14476B;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center mb-4">Gestion des Patients</h2>
+<br>
+        <!-- Section pour afficher la liste des patients déjà inscrits -->
+        <div class="card mb-4">
+            <h3>Patients Inscrits</h3>
+            <table>
+                <thead>
+                    <tr class="one">
+                        <th>#</th>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Téléphone</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="patient-table-body">
+                    <tr>
+                        <td>1</td>
+                        <td>bouhadja</td>
+                        <td>yasser</td>
+                        <td>0555-123456</td>
+                        <td>bou_yase@example.com</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm" onclick="voirPatient(this)">Voir</button>
+
+                            <button class="btn btn-warning btn-sm" onclick="editPatient(this)" >Modifier</button>
+                            <button class="btn btn-danger btn-sm" onclick="deletePatient(this)">Supprimer</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>bounatiro</td>
+                        <td>lamia</td>
+                        <td>0666-654321</td>
+                        <td>lamiabou@example.com</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm">Voir</button>
+                            <button class="btn btn-warning btn-sm" onclick="editPatient(this)">Modifier</button>
+                            <button class="btn btn-danger btn-sm" onclick="deletePatient(this)">Supprimer</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Section pour ajouter un nouveau patient -->
+        <div class="card">
+            <h3>Ajouter un Nouveau Patient</h3>
+            <form id="patient-form">
+                <label for="nom" class="form-label">Nom</label>
+                <input type="text" class="form-control" id="nom" placeholder="Entrer le nom du patient" required>
+
+                <label for="prenom" class="form-label">Prénom</label>
+                <input type="text" class="form-control" id="prenom" placeholder="Entrer le prénom du patient" required>
+
+                <label for="telephone" class="form-label">Téléphone</label>
+                <input type="text" class="form-control" id="telephone" placeholder="Entrer le numéro de téléphone" required>
+
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="Entrer l'email du patient" required>
+
+                <button type="submit" class="btn btn-success">Enregistrer</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('patient-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Récupérer les valeurs des champs
+            const nom = document.getElementById('nom').value;
+            const prenom = document.getElementById('prenom').value;
+            const telephone = document.getElementById('telephone').value;
+            const email = document.getElementById('email').value;
+
+            // Ajouter une nouvelle ligne dans le tableau existant
+            const tableBody = document.getElementById('patient-table-body');
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${tableBody.children.length + 1}</td>
+                <td>${nom}</td>
+                <td>${prenom}</td>
+                <td>${telephone}</td>
+                <td>${email}</td>
+                <td>
+                    <button class="btn btn-primary btn-sm">Voir</button>
+                    <button class="btn btn-warning btn-sm" onclick="editPatient(this)">Modifier</button>
+                    <button class="btn btn-danger btn-sm" onclick="deletePatient(this)">Supprimer</button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+
+            // Réinitialiser le formulaire
+            document.getElementById('patient-form').reset();
+        });
+
+        function deletePatient(button) {
+            const row = button.parentElement.parentElement;
+            row.remove();
+
+            // Réorganiser les indices
+            const tableBody = document.getElementById('patient-table-body');
+            Array.from(tableBody.children).forEach((row, index) => {
+                row.children[0].textContent = index + 1;
+            });
+        }
+
+      
+       
+        function editPatient(button) {
+    const row = button.parentElement.parentElement;
+    const nom = row.children[1].textContent;
+    const prenom = row.children[2].textContent;
+    const telephone = row.children[3].textContent;
+    const email = row.children[4].textContent;
+
+    // Stocker les informations du patient dans sessionStorage
+    sessionStorage.setItem('editNom', nom);
+    sessionStorage.setItem('editPrenom', prenom);
+    sessionStorage.setItem('editTelephone', telephone);
+    sessionStorage.setItem('editEmail', email);
+
+    // Rediriger vers la page d'édition
+    window.location.href = 'edit.html';
+}
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+    // Récupérer les informations du patient depuis sessionStorage
+    const nom = sessionStorage.getItem('patientNom');
+    const prenom = sessionStorage.getItem('patientPrenom');
+    const telephone = sessionStorage.getItem('patientTelephone');
+    const email = sessionStorage.getItem('patientEmail');
+
+    // Afficher les informations dans les éléments HTML
+    document.getElementById('nom').textContent = nom;
+    document.getElementById('prenom').textContent = prenom;
+    document.getElementById('telephone').textContent = telephone;
+    document.getElementById('email').textContent = email;
+
+    // Supprimer les informations de sessionStorage après affichage
+    sessionStorage.removeItem('patientNom');
+    sessionStorage.removeItem('patientPrenom');
+    sessionStorage.removeItem('patientTelephone');
+    sessionStorage.removeItem('patientEmail');
+});
+
+            sessionStorage.removeItem('updatedPatient');
+        
+   
+    function voirPatient(button) {
+    const row = button.parentElement.parentElement;
+    const nom = row.children[1].textContent;
+    const prenom = row.children[2].textContent;
+    const telephone = row.children[3].textContent;
+    const email = row.children[4].textContent;
+
+   
+    sessionStorage.setItem('patientNom', nom);
+    sessionStorage.setItem('patientPrenom', prenom);
+    sessionStorage.setItem('patientTelephone', telephone);
+    sessionStorage.setItem('patientEmail', email);
+
+
+    window.location.href = 'informations.html'; 
+}
+
+
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestion des Rendez-vous - Cabinet Dentaire</title>
+  <style>
+    /* Styles généraux */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    header {
+      background-color: #007bff;
+      color: #fff;
+      text-align: center;
+      padding: 1rem 0;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    table th, table td {
+      padding: 10px;
+      text-align: left;
+      border: 1px solid #ccc;
+    }
+
+    table th {
+      background-color: #007bff;
+      color: white;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      margin: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .notification {
+      background-color: #f9f9f9;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 20px 0;
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .btn-danger {
+      background-color: #dc3545;
+    }
+
+    .btn-danger:hover {
+      background-color: #c82333;
+    }
+
+    .btn-success {
+      background-color: #28a745;
+    }
+
+    .btn-success:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Gestion des Rendez-vous - Cabinet Dentaire</h1>
+  </header>
+  
+  <div class="container">
+    <!-- Notifications -->
+    <div id="notification" class="notification">
+      <p><strong>Aucune notification pour le moment.</strong></p>
+    </div>
+
+    <!-- Section des informations personnelles -->
+    <div class="section">
+      <h2>Informations personnelles</h2>
+      <p><strong>Nom :</strong> <span id="name">Sarah</span></p>
+      <p><strong>Date de naissance :</strong> <span id="dob">01/01/1990</span></p>
+      <p><strong>Téléphone :</strong> <span id="phone">06 00 00 00 00</span></p>
+      <p><strong>Email :</strong> <span id="email">sarah@example.com</span></p>
+      <p><strong>Adresse :</strong> <span id="address">123 Rue, Alger</span></p>
+      <button onclick="modifyInfo()">Modifier les informations</button>
+    </div>
+
+    <!-- Section des rendez-vous -->
+    <div class="section">
+      <h2>Historique des Rendez-vous</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Traitement</th>
+            <th>Médecin</th>
+          </tr>
+        </thead>
+        <tbody id="pastAppointments">
+          <!-- Les rendez-vous seront affichés ici -->
+        </tbody>
+      </table>
+      <button onclick="addAppointment()">Ajouter un rendez-vous</button>
+      <button class="btn-danger" onclick="cancelAppointment()">Annuler un rendez-vous</button>
+    </div>
+
+    <!-- Section des paiements -->
+    <div class="section">
+      <h2>Historique des Paiements</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Montant</th>
+            <th>Pour</th>
+          </tr>
+        </thead>
+        <tbody id="paymentHistory">
+          <!-- Les paiements seront affichés ici -->
+        </tbody>
+      </table>
+      <button class="btn-success" onclick="addPayment()">Ajouter un paiement</button>
+    </div>
+
+    <!-- Section des actions -->
+    <div class="section">
+      <button onclick="bookNewAppointment()">Prendre un nouveau rendez-vous</button>
+      <button onclick="contactSupport()">Contacter le support</button>
+    </div>
+  </div>
+
+  <script>
+  ConfirmButton.addEventListener('click', () => {
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const service = document.getElementById('serviceSelect').value;
+    const date = document.getElementById('dateSelect').value;
+
+    // Vérifier si tous les champs sont remplis
+    if (!name || !email || !phone || !service || !date) {
+        alert("Veuillez remplir tous les champs.");
+    } else {
+        confirmationMessage.textContent = `Merci, ${name} ! Votre rendez-vous pour ${service} a été confirmé pour le ${date}.`;
+        confirmationMessage.style.color = 'green';
+        currentSection = 0; // Retourner à la première section après la confirmation
+        showSection(currentSection);  // Afficher la première section
+    }
+});
+
+// Initialiser l'affichage de la première section
+showSection(currentSection);
+// Données initiales
+const appointments = [
+            { date: '12/12/2023', treatment: 'Extraction de dent', doctor: 'Dr. Samira' }
+        ];
+
+        const payments = [
+            { date: '12/12/2023', amount: '5000 DZD', for: 'Extraction dentaire' },
+            { date: '10/11/2023', amount: '3000 DZD', for: 'Consultation' },
+            { date: '03/10/2023', amount: '2000 DZD', for: 'Nettoyage dentaire' }
+        ];
+
+        // Fonction pour modifier les informations personnelles
+        function editPersonalInfo() {
+            const newName = prompt("Entrez le nouveau nom", document.getElementById('name').innerText);
+            if (newName) {
+                document.getElementById('name').innerText = newName;
+            }
+            const newDob = prompt("Entrez la nouvelle date de naissance", document.getElementById('dob').innerText);
+            if (newDob) {
+                document.getElementById('dob').innerText = newDob;
+            }
+            const newPhone = prompt("Entrez le nouveau numéro de téléphone", document.getElementById('phone').innerText);
+            if (newPhone) {
+                document.getElementById('phone').innerText = newPhone;
+            }
+            const newEmail = prompt("Entrez le nouvel email", document.getElementById('email').innerText);
+            if (newEmail) {
+                document.getElementById('email').innerText = newEmail;
+            }
+            const newAddress = prompt("Entrez la nouvelle adresse", document.getElementById('address').innerText);
+            if (newAddress) {
+                document.getElementById('address').innerText = newAddress;
+            }
+        }
+
+        // Ajouter un rendez-vous
+        function addAppointment() {
+            const date = prompt("Entrez la date du rendez-vous");
+            const treatment = prompt("Entrez le traitement prévu");
+            const doctor = prompt("Entrez le nom du médecin");
+            if (date && treatment && doctor) {
+                appointments.push({ date, treatment, doctor });
+                displayAppointments();
+            }
+        }
+
+        // Ajouter un paiement
+        function addPayment() {
+            const date = prompt("Entrez la date du paiement");
+            const amount = prompt("Entrez le montant");
+            const forWhat = prompt("Entrez la raison du paiement");
+            if (date && amount && forWhat) {
+                payments.push({ date, amount, for: forWhat });
+                displayPayments();
+            }
+        }
+
+        // Afficher les rendez-vous
+        function displayAppointments() {
+            const pastAppointmentsTable = document.getElementById('pastAppointments');
+            pastAppointmentsTable.innerHTML = '';
+            appointments.forEach(appointment => {
+                const row = `<tr><td>${appointment.date}</td><td>${appointment.treatment}</td><td>${appointment.doctor}</td></tr>`;
+                pastAppointmentsTable.innerHTML += row;
+            });
+        }
+
+        // Afficher les paiements
+        function displayPayments() {
+            const paymentTable = document.getElementById('paymentHistory');
+            paymentTable.innerHTML = '';
+            payments.forEach(payment => {
+                const row = `<tr><td>${payment.date}</td><td>${payment.amount}</td><td>${payment.for}</td></tr>`;
+                paymentTable.innerHTML += row;
+            });
+        }
+
+        // Notifications dynamiques
+        function showNotification(message) {
+            const notificationDiv = document.getElementById('notification');
+            notificationDiv.innerHTML = `<p><strong>${message}</strong></p>`;
+        }
+
+        // Initialisation
+        displayAppointments();
+        displayPayments();
+        showNotification("Votre prochain rendez-vous est dans 5 jours.");
+
+        // Actions des boutons
+        function modifyInfo() {
+            editPersonalInfo();
+        }
+
+        function cancelAppointment() {
+            alert("Le rendez-vous a été annulé.");
+        }
+
+        function bookNewAppointment() {
+            alert("Prenez un nouveau rendez-vous!");
+        }
+
+        function contactSupport() {
+            alert("Contacter le support");
+        }
+    
+  </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+.content-section {
+  display: none;
+  padding: 20px;
+}
+
+.content-section.active {
+  display: block;
+}
+
+.hidden {
+  display: none;
+}

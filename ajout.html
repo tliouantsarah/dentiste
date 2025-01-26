@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter un Article - Gestion de Stock</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Lien vers votre fichier CSS -->
+    <style>
+        /* Styles spécifiques à cette page */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212; /* Fond sombre */
+            color: #e0e0e0; /* Texte clair */
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #1e1e1e; /* Fond de la carte */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #007bb5; /* Bordure bleue */
+            background-color: #2a2a2a; /* Fond des champs */
+            color: #e0e0e0; /* Couleur du texte */
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #005f8c /* Couleur du bouton */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #005f8c; /* Couleur au survol */
+        }
+        h2{
+            color:#007bb5 ;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Ajouter un Article</h2>
+        <form id="add-article-form" onsubmit="return addArticle()">
+            <div class="form-group">
+                <label for="name">Nom de l'Article :</label>
+                <input type="text" id="name" required placeholder="Entrez le nom de l'article">
+            </div>
+            <div class="form-group">
+                <label for="category">Catégorie :</label>
+                <select id="category" required>
+                    <option value="">Sélectionnez une catégorie</option>
+                    <option value="Médicaments">Médicaments</option>
+                    <option value="Hygiène">Hygiène</option>
+                    <option value="Produits">Produits</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="quantity">Quantité :</label>
+                <input type="number" id="quantity" required placeholder="Entrez la quantité">
+            </div>
+            <div class="form-group">
+                <label for="supplier">Fournisseur :</label>
+                <input type="text" id="supplier" required placeholder="Entrez le nom du fournisseur">
+            </div>
+            <div class="form-group">
+                <label for="expiry-date">Date de Péremption :</label>
+                <input type="date" id="expiry-date" required>
+            </div>
+            <button type="submit">Ajouter l'Article</button>
+        </form>
+    </div>
+
+    <script>
+        function addArticle() {
+            // Récupération des valeurs du formulaire
+            const name = document.getElementById('name').value;
+            const category = document.getElementById('category').value;
+            const quantity = document.getElementById('quantity').value;
+            const supplier = document.getElementById('supplier').value;
+            const expiryDate = document.getElementById('expiry-date').value;
+
+            // Logique pour ajouter l'article (par exemple, envoyer les données à un serveur)
+            
+            alert(`Article ajouté : ${name}, Catégorie : ${category}, Quantité : ${quantity}, Fournisseur : ${supplier}, Date de Péremption : ${expiryDate}`);
+            
+            // Réinitialiser le formulaire
+            document.getElementById('add-article-form').reset();
+            
+            return false; 
+            <script>
+        function addArticle() {
+            // Récupération des valeurs du formulaire
+            const name = document.getElementById('name').value;
+            const category = document.getElementById('category').value;
+            const quantity = document.getElementById('quantity').value;
+            const supplier = document.getElementById('supplier').value;
+            const expiryDate = document.getElementById('expiry-date').value;
+
+            // Création de l'objet article
+            const article = {
+                name,
+                category,
+                quantity,
+                supplier,
+                expiryDate
+            };
+
+            // Récupérer les articles existants dans le localStorage
+            let stock = JSON.parse(localStorage.getItem('stock')) || [];
+            stock.push(article); // Ajouter le nouvel article au tableau
+            localStorage.setItem('stock', JSON.stringify(stock)); // Mettre à jour le localStorage
+
+            alert('Article ajouté avec succès !');
+
+            // Rediriger vers la page stock
+            window.location.href = 'stock.html';
+
+            return false; // Empêche le rechargement de la page
+        }
+    
+        }
+    </script>
+</body>
+</html>
